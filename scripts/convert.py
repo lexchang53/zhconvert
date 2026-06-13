@@ -29,24 +29,6 @@ except ImportError:
     install_package("requests")
     import requests
 
-try:
-    import docx
-except ImportError:
-    install_package("docx", "python-docx")
-    import docx
-
-try:
-    import openpyxl
-except ImportError:
-    install_package("openpyxl")
-    import openpyxl
-
-try:
-    import pptx
-except ImportError:
-    install_package("pptx", "python-pptx")
-    import pptx
-
 
 API_URL = "https://api.zhconvert.org/convert"
 MAX_CHUNK_SIZE = 5000  # 繁化姬單次 API 建議最大發送字數
@@ -128,6 +110,12 @@ def convert_text_file(file_path, output_path, converter):
 
 def convert_docx_file(file_path, output_path, converter):
     """處理 Word 檔案（逐個 Run 替換以保留格式）"""
+    try:
+        import docx
+    except ImportError:
+        install_package("docx", "python-docx")
+        import docx
+        
     doc = docx.Document(file_path)
     
     # 1. 處理文件主體段落
@@ -167,6 +155,12 @@ def convert_docx_file(file_path, output_path, converter):
 
 def convert_xlsx_file(file_path, output_path, converter):
     """處理 Excel 檔案（保留儲存格樣式與公式）"""
+    try:
+        import openpyxl
+    except ImportError:
+        install_package("openpyxl")
+        import openpyxl
+        
     wb = openpyxl.load_workbook(file_path)
     for sheet_name in wb.sheetnames:
         ws = wb[sheet_name]
@@ -182,6 +176,12 @@ def convert_xlsx_file(file_path, output_path, converter):
 
 def convert_pptx_file(file_path, output_path, converter):
     """處理 PowerPoint 檔案（保留版面與投影片樣式）"""
+    try:
+        import pptx
+    except ImportError:
+        install_package("pptx", "python-pptx")
+        import pptx
+        
     prs = pptx.Presentation(file_path)
     for slide in prs.slides:
         for shape in slide.shapes:
